@@ -1,0 +1,24 @@
+name: braille_assist
+description: "A multi-disability assistive system UI, focusing on the Braille module."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.1.0
+  font_awesome_flutter: ^10.7.0
+  file_picker: ^6.1.1
+  camera: ^0.10.5+9
+  lottie: ^3.1.0
+  flutter_staggered_animations: ^1.1.1
+  provider: ^6.1.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
