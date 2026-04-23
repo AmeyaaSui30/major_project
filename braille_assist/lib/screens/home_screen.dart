@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'braille_module_screen.dart';
+import 'sign_language_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -95,9 +96,11 @@ class HomeScreen extends StatelessWidget {
                           icon: FontAwesomeIcons.hands,
                           color: const Color(0xFF00C48C),
                           onTap: () {
-                            // Empty for now as requested
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Module in development')),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignLanguageScreen(),
+                              ),
                             );
                           },
                         ),

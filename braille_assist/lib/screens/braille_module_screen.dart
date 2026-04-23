@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 class BrailleModuleScreen extends StatefulWidget {
   const BrailleModuleScreen({super.key});
 
@@ -31,48 +32,72 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
     super.dispose();
   }
 
-  void _simulateProcessing(String source) {
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+      if (image != null) {
+        _processInputForBraille(image.path, 'Camera Image');
+      }
+    } catch (e) {
+      debugPrint("Camera error: $e");
+    }
+  }
+
+  Future<void> _pickPDF() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+      );
+      if (result != null && result.files.single.path != null) {
+        _processInputForBraille(result.files.single.path!, 'PDF Document');
+      }
+    } catch (e) {
+      debugPrint("File picker error: $e");
+    }
+  }
+
+  void _processInputForBraille(String filePath, String source) {
     setState(() {
       _isProcessing = true;
-      _status = 'Reading $source (OCR)...';
-      _currentText = 'Extracting...';
-      _progress = 0.2;
+      _status = 'Reading $source...';
+      _currentText = 'File: ${filePath.split("/").last}';
+      _progress = 0.3;
     });
 
-    Timer(const Duration(seconds: 2), () {
+    // TODO(USER): IMPLEMENT AIML TO IOT BACKEND HERE
+    // This is the placeholder where you should send `filePath`
+    // to your ML backend and trigger your IoT logic.
+
+    Timer(const Duration(seconds: 3), () {
       setState(() {
-        _status = 'Mapping text to Braille Engine...';
-        _progress = 0.5;
-        _currentText = 'The quick brown fox jumps over the lazy dog.';
+        _status = 'Transmitting to IoT Device (AIML)...';
+        _progress = 0.8;
       });
 
       Timer(const Duration(seconds: 2), () {
+        if (!mounted) return;
         setState(() {
-          _status = 'Transmitting to IoT Device (Bluetooth)...';
-          _progress = 0.8;
+          _status = 'Tactile Output Actuated';
+          _isProcessing = false;
+          _progress = 1.0;
         });
-
-        Timer(const Duration(seconds: 2), () {
-          setState(() {
-            _status = 'Tactile Output Actuated';
-            _isProcessing = false;
-            _progress = 1.0;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: const [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text('Braille pins updated successfully!'),
-                ],
-              ),
-              backgroundColor: Colors.green.shade600,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: const [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 8),
+                Text('Transmission to IoT device simulated.'),
+              ],
             ),
-          );
-        });
+            backgroundColor: Colors.green.shade600,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        );
       });
     });
   }
@@ -206,7 +231,7 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
                       icon: FontAwesomeIcons.camera,
                       label: 'Use Camera',
                       color: const Color(0xFF4C4DDC),
-                      onPressed: _isProcessing ? null : () => _simulateProcessing('Camera Image'),
+                      onPressed: _isProcessing ? null : _pickImage,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -215,7 +240,7 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
                       icon: FontAwesomeIcons.solidFilePdf,
                       label: 'Upload PDF',
                       color: const Color(0xFF00C48C),
-                      onPressed: _isProcessing ? null : () => _simulateProcessing('PDF Document'),
+                      onPressed: _isProcessing ? null : _pickPDF,
                     ),
                   ),
                 ],
