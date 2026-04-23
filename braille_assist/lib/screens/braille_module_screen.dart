@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+
 class BrailleModuleScreen extends StatefulWidget {
   const BrailleModuleScreen({super.key});
 
@@ -10,7 +12,8 @@ class BrailleModuleScreen extends StatefulWidget {
   State<BrailleModuleScreen> createState() => _BrailleModuleScreenState();
 }
 
-class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTickerProviderStateMixin {
+class _BrailleModuleScreenState extends State<BrailleModuleScreen>
+    with SingleTickerProviderStateMixin {
   String _status = 'Hardware Connected';
   String _currentText = 'Awaiting input document...';
   bool _isProcessing = false;
@@ -95,7 +98,8 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
             ),
             backgroundColor: Colors.green.shade600,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
         );
       });
@@ -105,13 +109,34 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        title: const Text('Visually Impaired Module', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
+        title: const Text(
+          'TriConnect',
+          style: TextStyle(
+            color: Color(0xFFB19CD9),
+            fontWeight: FontWeight.bold,
+            letterSpacing: -0.5,
+          ),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          icon: const Icon(Icons.arrow_back_ios_new,
+              size: 20, color: Color(0xFF2D2D2D)),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: Colors.grey.shade300,
+              child: const Icon(Icons.person, color: Colors.white, size: 20),
+            ),
+          ),
+        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -119,24 +144,45 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Module Title
+              Text(
+                'Touch Output',
+                style: GoogleFonts.outfit(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF2D2D2D),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Convert documents to tactile signals',
+                style: GoogleFonts.outfit(
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              const SizedBox(height: 24),
+
               // Hardware UI representation
               Container(
                 height: 220,
                 decoration: BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
-                     BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 20, offset: const Offset(0, 10)),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
                   ],
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/hardware_braille.png'),
-                    fit: BoxFit.cover,
-                  ),
+                  border: Border.all(color: const Color(0xFFF0E8FF), width: 2),
                 ),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     gradient: LinearGradient(
-                      colors: [Colors.transparent, Colors.black.withOpacity(0.8)],
+                      colors: [const Color(0xFFF9F6FF), Colors.white],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
@@ -162,14 +208,18 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
                           const SizedBox(width: 8),
                           Text(
                             _status,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                            style: GoogleFonts.outfit(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: const Color(0xFF2D2D2D)),
                           ),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Nexus Braille Display v1.0',
-                        style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                        style: GoogleFonts.outfit(
+                            color: Colors.grey.shade600, fontSize: 12),
                       ),
                     ],
                   ),
@@ -177,12 +227,15 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
               ),
 
               const SizedBox(height: 32),
-              
+
               // Progress Section
               if (_isProcessing) ...[
                 Text(
                   'Processing Document...',
-                  style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 14),
+                  style: GoogleFonts.outfit(
+                      color: const Color(0xFF2D2D2D),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 12),
                 ClipRRect(
@@ -190,8 +243,9 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
                   child: LinearProgressIndicator(
                     value: _progress,
                     minHeight: 8,
-                    backgroundColor: Colors.white.withOpacity(0.1),
-                    valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4C4DDC)),
+                    backgroundColor: const Color(0xFFF0E8FF),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Color(0xFFB19CD9)),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -201,21 +255,33 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Extracted Text (To Braille)',
-                      style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w600),
+                      style: GoogleFonts.outfit(
+                          color: Colors.grey.shade500,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       _currentText,
-                      style: const TextStyle(color: Colors.white, fontSize: 18, height: 1.5),
+                      style: GoogleFonts.outfit(
+                          color: const Color(0xFF2D2D2D),
+                          fontSize: 18,
+                          height: 1.5),
                     ),
                   ],
                 ),
@@ -230,7 +296,7 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
                     child: _buildActionButton(
                       icon: FontAwesomeIcons.camera,
                       label: 'Use Camera',
-                      color: const Color(0xFF4C4DDC),
+                      color: const Color(0xFFB19CD9),
                       onPressed: _isProcessing ? null : _pickImage,
                     ),
                   ),
@@ -239,7 +305,8 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
                     child: _buildActionButton(
                       icon: FontAwesomeIcons.solidFilePdf,
                       label: 'Upload PDF',
-                      color: const Color(0xFF00C48C),
+                      color: const Color(0xFFD4C4FB),
+                      textColor: const Color(0xFF2D2D2D),
                       onPressed: _isProcessing ? null : _pickPDF,
                     ),
                   ),
@@ -256,25 +323,26 @@ class _BrailleModuleScreenState extends State<BrailleModuleScreen> with SingleTi
     required IconData icon,
     required String label,
     required Color color,
+    Color textColor = Colors.white,
     required VoidCallback? onPressed,
   }) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        disabledBackgroundColor: color.withOpacity(0.3),
+        disabledBackgroundColor: color.withOpacity(0.5),
         padding: const EdgeInsets.symmetric(vertical: 20),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: 8,
-        shadowColor: color.withOpacity(0.4),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 0,
       ),
       child: Column(
         children: [
-          Icon(icon, color: Colors.white, size: 28),
+          Icon(icon, color: textColor, size: 28),
           const SizedBox(height: 12),
           Text(
             label,
-            style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+            style: GoogleFonts.outfit(
+                color: textColor, fontSize: 14, fontWeight: FontWeight.bold),
           ),
         ],
       ),
